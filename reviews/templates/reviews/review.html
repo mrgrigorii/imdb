@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/" method="post">
+    {% csrf_token %}
+                <fieldset>
+                <legend>Review scoring</legend>
+                    <div class="form-group" margin='100px'>
+                      <label for="exampleTextarea">Submit you review</label>
+                      <textarea class="form-control" id="exampleTextarea" rows="3" name="message"></textarea>
+                    </div>
+                </fieldset>  
+    <input id="exampleTextarea" type="submit" value="Submit">
+</form>
+{% if message_text %}
+    <br>
+    	<p>Submitted review:<p/>
+    	<p>{{message_text}}<p/>
+	<br>
+{% endif %}
+
+{% if result != None %}
+	<br>
+	{% if result == 1 %}
+	    <p>Review Sentiment - Positive<p/>
+	    <p>Score - {{score}}<p/>
+	{% else %}
+		<p>Review Sentiment - Negative<p/>
+		<p>Score - {{score}}<p/>
+	{% endif %}
+	<br>
+{% endif %}
+{% endblock %}
