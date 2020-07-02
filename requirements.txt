@@ -5,3 +5,4 @@ Keras
 nltk
 tensorflow
 tqdm
+django-heroku
