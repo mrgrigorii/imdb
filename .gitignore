@@ -2,3 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
+venv
+*.pyc
+staticfiles
+.env
+db.sqlite3
+getting-started/*
