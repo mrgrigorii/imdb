@@ -49,11 +49,12 @@ def get_review(request):
 
             result = model.predict(x=tokens_pad).tolist()[0][0]
             score = get_score(result)
+            del tokens, result, tokens_pad, form
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
             return render(request, 'reviews/review.html', {
-                'form': form,
+                'form': ReviewForm(),
                 'message_text': message,
                 'result': int(round(result, 0)),
                 'score': score,
