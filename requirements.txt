@@ -1,8 +1,8 @@
 Django
 gunicorn
 ipython
+tensorflow-cpu
 Keras
 nltk
-tensorflow
 tqdm
 django-heroku
