@@ -11,14 +11,24 @@ from django.utils import timezone
 from .forms import ReviewForm
 from .models import Review
 
-model = keras.models.load_model('data/model_best.h5')
-with open('data/tokenizer_word2vec.pickle', 'rb') as handle:
-    tokenizer = pickle.load(handle)
 MAX_LEN = 231
+MODEL_READY = False
+MODEL = None
+TOKENIZER = None
+
+
+def load_model():
+    global MODEL, TOKENIZER, MODEL_READY
+    MODEL = keras.models.load_model('data/model_best.h5')
+    with open('data/tokenizer_word2vec.pickle', 'rb') as handle:
+        TOKENIZER = pickle.load(handle)
+    MODEL_READY = True
 
 
 def get_review(request):
     # if this is a POST request we need to process the form data
+    if not MODEL_READY:
+        load_model()
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = ReviewForm(request.POST)
@@ -26,10 +36,10 @@ def get_review(request):
         if form.is_valid():
             message = form.cleaned_data['message']
 
-            tokens = tokenizer.texts_to_sequences([message, ])
+            tokens = TOKENIZER.texts_to_sequences([message, ])
             tokens_pad = pad_sequences(tokens, maxlen=MAX_LEN)
 
-            result = model.predict(x=tokens_pad).tolist()[0][0] * 10
+            result = MODEL.predict(x=tokens_pad).tolist()[0][0] * 10
             del tokens, tokens_pad, form
 
             new_review = Review(
